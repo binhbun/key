@@ -406,6 +406,122 @@
       width: 100%;
       z-index: 2000;
     }
+
+.card-overlay-wrapper {
+  position: relative;
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 100;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.card-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.card-overlay .lock-icon {
+  font-size: 3rem;
+  color: #666CFF;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.card-overlay .main-hint {
+  color: #1e2330;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-overlay .sub-hint {
+  color: #6e7a8f;
+  font-size: 0.95rem;
+  margin-top: 0px;
+  text-align: center;
+}
+
+.card-overlay .unlock-btn {
+  background: #666CFF;
+  color: #fff;
+  padding: 14px 40px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 16px rgba(102, 108, 255, 0.35);
+  margin-top: 8px;
+  min-width: 220px;
+}
+
+.card-overlay .unlock-btn:hover {
+  background: #555bd9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 108, 255, 0.45);
+}
+
+.card-overlay .unlock-btn:active {
+  transform: translateY(0);
+}
+
+.card-overlay .unlock-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-spinner.active {
+  display: flex;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e8ecf3;
+  border-top: 4px solid #666CFF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner .loading-text {
+  color: #1e2330;
+  font-weight: 500;
+  font-size: 1rem;
+}
   </style>
 </head>
 <body>
@@ -417,40 +533,51 @@
 
   <!-- HEADER -->
   <header class="app-header">
-    <a class="brand" href="#">
+    <a class="brand" href="https://authtool.app/">
       <svg viewBox="0 0 24 24"><path fill="#c1c0ff" d="M12,14.19531c-0.17551-0.00004-0.34793-0.04618-0.5-0.13379l-9-5.19726C2.02161,8.58794,1.85779,7.97612,2.13411,7.49773C2.22187,7.34579,2.34806,7.2196,2.5,7.13184l9-5.19336c0.30964-0.17774,0.69036-0.17774,1,0l9,5.19336c0.4784,0.27632,0.64221,0.88814,0.36589,1.36653C21.77813,8.65031,21.65194,8.7765,21.5,8.86426l-9,5.19726C12.34793,14.14913,12.17551,14.19527,12,14.19531z"/><path fill="#a2a1ff" d="M21.5,11.13184l-1.96411-1.13337L12.5,14.06152c-0.30947,0.17839-0.69053,0.17839-1,0L4.46411,9.99847L2.5,11.13184c-0.47839,0.27632-0.64221,0.88814-0.36589,1.36653C2.22187,12.65031,2.34806,12.7765,2.5,12.86426l9,5.19726c0.30947,0.17838,0.69053,0.17838,1,0l9-5.19726c0.4784-0.27632,0.64221-0.88814,0.36589-1.36653C21.77813,11.34579,21.65194,11.2196,21.5,11.13184z"/><path fill="#6563ff" d="M21.5,15.13184l-1.96411-1.13337L12.5,18.06152c-0.30947,0.17838-0.69053,0.17838-1,0l-7.03589-4.06305L2.5,15.13184c-0.47839,0.27632-0.64221,0.88814-0.36589,1.36653C2.22187,16.65031,2.34806,16.7765,2.5,16.86426l9,5.19726c0.30947,0.17838,0.69053,0.17838,1,0l9-5.19726c0.4784-0.27632,0.64221-0.88814,0.36589-1.36653C21.77813,15.34579,21.65194,15.2196,21.5,15.13184z"/></svg>
       <h6>APIServer</h6>
     </a>
     <div class="header-actions">
       <button title="Language"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12.87 15.07l-2.54-2.51l.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5l3.11 3.11l.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7l1.62-4.33L19.12 17h-3.24Z"/></svg></button>
       <button title="Theme"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 2c-1.79 1.15-3 3.18-3 5.5s1.21 4.35 3.03 5.5C4.46 13 2 10.54 2 7.5A5.5 5.5 0 0 1 7.5 2m11.57 1.5l1.43 1.43L4.93 20.5L3.5 19.07L19.07 3.5m-6.18 2.43L11.41 5L9.97 6l.42-1.7L9 3.24l1.75-.12l.58-1.65L12 3.1l1.73.03l-1.35 1.13l.51 1.67m-3.3 3.61l-1.16-.73l-1.12.78l.34-1.32l-1.09-.83l1.36-.09l.45-1.29l.51 1.27l1.36.03l-1.05.87l.4 1.31M19 13.5a5.5 5.5 0 0 1-5.5 5.5c-1.22 0-2.35-.4-3.26-1.07l7.69-7.69c.67.91 1.07 2.04 1.07 3.26m-4.4 6.58l2.77-1.15l-.24 3.35l-2.53-2.2m4.33-2.7l1.15-2.77l2.2 2.54l-3.35.23m1.15-4.96l-1.14-2.78l3.34.24l-2.2 2.54M9.63 18.93l2.77 1.15l-2.53 2.19l-.24-3.34Z"/></svg></button>
-      <span class="btn-login">Login</span>
+      <span class="btn-login"><a class="brand" href="https://authtool.app/login/">Login</a></span>
     </div>
   </header>
 
   <!-- CONTENT -->
   <main class="app-wrapper app-content">
-    <div class="key-card">
+   <div class="key-card card-overlay-wrapper">
 
-      <h4 style='color: rgba(76, 78, 100, 0.87); font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";'>Key của bạn</h4>
-      <p class="sub-desc" style='color: rgba(76, 78, 100, 0.6); font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";'>Vui lòng lưu lại key này, bạn sẽ không thể xem lại sau khi đóng trang</p>
-
-      <!-- Key display -->
-      <div class="key-display">
-        <span class="key-value" id="apiKeyDisplay"></span>
-      </div>
-
-      <!-- Copy button -->
-      <button class="btn-copy" type="button" id="copyButton">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-        Sao chép key
-      </button>
-
-     
+  <div class="card-overlay" id="cardOverlay">
+    <div id="defaultContent" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+      <div class="lock-icon">🔒</div>
+      <div class="main-hint">Key của bạn đã được tạo ✅</div>
+      <div class="sub-hint"> Để tránh Spam mã Key, Vui lòng xác nhận mở khóa</div>
+      <button class="unlock-btn" id="unlockBtn">🔓 Mở khóa</button>
     </div>
+    
+    <div class="loading-spinner" id="loadingContent">
+      <div class="spinner"></div>
+      <div class="loading-text">⏳ Đang xác minh...</div>
+    </div>
+  </div>
+
+  <h4 style='color: rgba(76, 78, 100, 0.87); font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";'>Key của bạn</h4>
+  <p class="sub-desc" style='color: rgba(76, 78, 100, 0.6); font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";'>Vui lòng lưu lại key này, bạn sẽ không thể xem lại sau khi đóng trang</p>
+
+  <div class="key-display">
+    <span class="key-value" id="apiKeyDisplay"></span>
+  </div>
+
+  <button class="btn-copy" type="button" id="copyButton">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    Sao chép key
+  </button>
+
+</div>
   </main>
 
   <!-- FOOTER -->
@@ -553,6 +680,25 @@
       });
 
     })();
+
+    var unlockBtn = document.getElementById('unlockBtn');
+    var cardOverlay = document.getElementById('cardOverlay');
+    var defaultContent = document.getElementById('defaultContent');
+    var loadingContent = document.getElementById('loadingContent');
+
+    if (unlockBtn && cardOverlay) {
+      unlockBtn.addEventListener('click', function() {
+        unlockBtn.disabled = true;
+        
+        defaultContent.style.display = 'none';
+        loadingContent.classList.add('active');
+        
+        setTimeout(function() {
+          cardOverlay.classList.add('hidden');
+          showToast('🔓 Đã mở khóa! Bạn có thể sao chép key.', 'success', 2500);
+        }, 2000);
+      });
+    }
   </script>
 </body>
 </html>
