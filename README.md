@@ -1,2 +1,704 @@
-# key
-a
+<!DOCTYPE html>
+<html lang="vi" dir="ltr" class="light-layout" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <title>APIServer - API Credential Management</title>
+  <meta name="robots" content="index,follow">
+  <meta name="description" content="APIServer - Professional API Credential Management. Compatible with any iOS version.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@site">
+  <meta name="twitter:creator" content="@handle">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4848075834287581"
+     crossorigin="anonymous"></script>
+  <meta property="og:title" content="APIServer - API Credential Management">
+  <meta property="og:description" content="Professional API Credential Management System. Compatible with all iOS versions, providing secure and efficient API key management solutions.">
+  <meta property="og:type" content="website">
+  <meta property="og:image:alt" content="APIServer - API Credential Management">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="APIServer">
+  <meta name="viewport" content="initial-scale=1, width=device-width">
+  <meta name="keywords" content="APIServer, API Management, API Key, Credential Management, iOS API, Mobile Apps, API Security">
+  <meta name="language" content="English">
+  <meta name="author" content="baontq">
+  <meta name="revisit-after" content="7 days">
+  <meta name="generator" content="Next.js">
+  <link rel="shortcut icon" href="https://authtool.app/images/favicon.ico">
+  <meta property="og:url" content="https://authtool.app">
+  <meta property="og:image" content="https://authtool.app/images/og-image.jpg">
+  <link rel="canonical" href="https://authtool.app">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset và style nền */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #F7F7F9;
+      font-family: 'Inter', sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: rgba(76, 78, 100, 0.87);
+      line-height: 1.5;
+      letter-spacing: 0.15px;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Container chính */
+    .app-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Header / AppBar */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 1100;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      border-bottom: 1px solid #eaeef3;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #1e2330;
+    }
+
+    .brand svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    .brand h6 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-actions button {
+      background: transparent;
+      border: none;
+      cursor: default;
+      font-size: 1.5rem;
+      color: #4c4e64;
+      display: flex;
+      align-items: center;
+      padding: 6px;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    .header-actions button:hover {
+      background: #f0f2f5;
+    }
+
+    .btn-login {
+      background: #666CFF !important;
+      color: #fff !important;
+      padding: 6px 20px !important;
+      border-radius: 30px !important;
+      font-size: 0.875rem !important;
+      font-weight: 500;
+      border: none;
+      cursor: default;
+      height: 36px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Nội dung chính */
+    .app-content {
+      padding: 40px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 140px);
+    }
+
+    /* Card chính */
+    .key-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      max-width: 560px;
+      width: 100%;
+      margin: 0 auto;
+      border: 1px solid #edf1f7;
+    }
+
+    .key-card .icon-header {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .key-card .icon-header svg {
+      width: 56px;
+      height: 56px;
+      color: #666CFF;
+    }
+
+    .key-card h4 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e2330;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .key-card .sub-desc {
+      text-align: center;
+      color: #6e7a8f;
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+
+    .key-display {
+      background: #f7f8fc;
+      border-radius: 12px;
+      padding: 16px 20px;
+      border: 1px solid #e8ecf3;
+      margin-bottom: 24px;
+      word-break: break-all;
+      font-family: 'Inter', monospace;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #1e2330;
+      text-align: center;
+      letter-spacing: 0.3px;
+      user-select: all;
+    }
+
+    .key-display .key-value {
+      background: #f7f8fc;
+    }
+
+    .btn-copy {
+      background: #666CFF;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: 500;
+      border: none;
+      font-size: 0.95rem;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      transition: 0.2s;
+    }
+
+    .btn-copy svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-copy:hover {
+      background: #555bd9;
+    }
+
+    .warning-note {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #fff8e6;
+      border-radius: 10px;
+      border-left: 4px solid #f5b342;
+      font-size: 0.85rem;
+      color: #6e5a2e;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .warning-note svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: #f5b342;
+    }
+
+    /* Footer */
+    .layout-footer {
+      background: #fff;
+      border-top: 1px solid #eaeef3;
+      padding: 16px 24px;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #6e7a8f;
+    }
+
+    .footer-content a {
+      color: #6e7a8f;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .footer-content a:hover {
+      color: #666CFF;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Toast notification - góc phải */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 14px 24px;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 500;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      pointer-events: auto;
+      animation: slideIn 0.4s ease forwards;
+      min-width: 220px;
+      max-width: 380px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toast-success {
+      background: #10b981;
+    }
+
+    .toast-error {
+      background: #ef4444;
+    }
+
+    .toast-warning {
+      background: #f59e0b;
+    }
+
+    .toast-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+    }
+
+    .toast-close {
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: default;
+      font-size: 1.2rem;
+      padding: 0 4px;
+    }
+
+    .toast-close:hover {
+      color: #fff;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(60px);
+      }
+    }
+
+    .toast-hide {
+      animation: slideOut 0.3s ease forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .key-card {
+        padding: 28px 20px;
+      }
+      .app-header {
+        padding: 0 16px;
+      }
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer-links {
+        justify-content: center;
+      }
+      .toast-container {
+        top: 80px;
+        right: 12px;
+        left: 12px;
+      }
+      .toast {
+        max-width: 100%;
+        font-size: 0.9rem;
+        padding: 12px 18px;
+      }
+    }
+
+    /* thanh progress giả */
+    #nprogress .bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: #666CFF;
+      width: 100%;
+      z-index: 2000;
+    }
+
+.card-overlay-wrapper {
+  position: relative;
+}
+
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 100;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.card-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.card-overlay .lock-icon {
+  font-size: 3rem;
+  color: #666CFF;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.card-overlay .main-hint {
+  color: #1e2330;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-overlay .sub-hint {
+  color: #6e7a8f;
+  font-size: 0.95rem;
+  margin-top: 0px;
+  text-align: center;
+}
+
+.card-overlay .unlock-btn {
+  background: #666CFF;
+  color: #fff;
+  padding: 14px 40px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 16px rgba(102, 108, 255, 0.35);
+  margin-top: 8px;
+  min-width: 220px;
+}
+
+.card-overlay .unlock-btn:hover {
+  background: #555bd9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 108, 255, 0.45);
+}
+
+.card-overlay .unlock-btn:active {
+  transform: translateY(0);
+}
+
+.card-overlay .unlock-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-spinner.active {
+  display: flex;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e8ecf3;
+  border-top: 4px solid #666CFF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner .loading-text {
+  color: #1e2330;
+  font-weight: 500;
+  font-size: 1rem;
+}
+  </style>
+</head>
+<body>
+  <!-- thanh progress -->
+  <div id="nprogress"><div class="bar" style="width:100%;"></div></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 24 24"><path fill="#c1c0ff" d="M12,14.19531c-0.17551-0.00004-0.34793-0.04618-0.5-0.13379l-9-5.19726C2.02161,8.58794,1.85779,7.97612,2.13411,7.49773C2.22187,7.34579,2.34806,7.2196,2.5,7.13184l9-5.19336c0.30964-0.17774,0.69036-0.17774,1,0l9,5.19336c0.4784,0.27632,0.64221,0.88814,0.36589,1.36653C21.77813,8.65031,21.65194,8.7765,21.5,8.86426l-9,5.19726C12.34793,14.14913,12.17551,14.19527,12,14.19531z"/><path fill="#a2a1ff" d="M21.5,11.13184l-1.96411-1.13337L12.5,14.06152c-0.30947,0.17839-0.69053,0.17839-1,0L4.46411,9.99847L2.5,11.13184c-0.47839,0.27632-0.64221,0.88814-0.36589,1.36653C2.22187,12.65031,2.34806,12.7765,2.5,12.86426l9,5.19726c0.30947,0.17838,0.69053,0.17838,1,0l9-5.19726c0.4784-0.27632,0.64221-0.88814,0.36589-1.36653C21.77813,11.34579,21.65194,11.2196,21.5,11.13184z"/><path fill="#6563ff" d="M21.5,15.13184l-1.96411-1.13337L12.5,18.06152c-0.30947,0.17838-0.69053,0.17838-1,0l-7.03589-4.06305L2.5,15.13184c-0.47839,0.27632-0.64221,0.88814-0.36589,1.36653C2.22187,16.65031,2.34806,16.7765,2.5,16.86426l9,5.19726c0.30947,0.17838,0.69053,0.17838,1,0l9-5.19726c0.4784-0.27632,0.64221-0.88814,0.36589-1.36653C21.77813,15.34579,21.65194,15.2196,21.5,15.13184z"/></svg>
+      <h6>APIServer</h6>
+    </a>
+    <div class="header-actions">
+      <button title="Language"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12.87 15.07l-2.54-2.51l.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5l3.11 3.11l.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7l1.62-4.33L19.12 17h-3.24Z"/></svg></button>
+      <button title="Theme"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 2c-1.79 1.15-3 3.18-3 5.5s1.21 4.35 3.03 5.5C4.46 13 2 10.54 2 7.5A5.5 5.5 0 0 1 7.5 2m11.57 1.5l1.43 1.43L4.93 20.5L3.5 19.07L19.07 3.5m-6.18 2.43L11.41 5L9.97 6l.42-1.7L9 3.24l1.75-.12l.58-1.65L12 3.1l1.73.03l-1.35 1.13l.51 1.67m-3.3 3.61l-1.16-.73l-1.12.78l.34-1.32l-1.09-.83l1.36-.09l.45-1.29l.51 1.27l1.36.03l-1.05.87l.4 1.31M19 13.5a5.5 5.5 0 0 1-5.5 5.5c-1.22 0-2.35-.4-3.26-1.07l7.69-7.69c.67.91 1.07 2.04 1.07 3.26m-4.4 6.58l2.77-1.15l-.24 3.35l-2.53-2.2m4.33-2.7l1.15-2.77l2.2 2.54l-3.35.23m1.15-4.96l-1.14-2.78l3.34.24l-2.2 2.54M9.63 18.93l2.77 1.15l-2.53 2.19l-.24-3.34Z"/></svg></button>
+      <span class="btn-login">Login</span>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="app-wrapper app-content">
+   <div class="key-card card-overlay-wrapper">
+
+  <div class="card-overlay" id="cardOverlay">
+    <div id="defaultContent" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+      <div class="lock-icon">🔒</div>
+      <div class="main-hint">Key của bạn đã được tạo ✅</div>
+      <div class="sub-hint"> Để tránh Spam mã Key, Vui lòng xác nhận mở khóa</div>
+      <button class="unlock-btn" id="unlockBtn">🔓 Mở khóa</button>
+    </div>
+    
+    <div class="loading-spinner" id="loadingContent">
+      <div class="spinner"></div>
+      <div class="loading-text">⏳ Đang xác minh...</div>
+    </div>
+  </div>
+
+  <h4 style='color: rgba(76, 78, 100, 0.87); font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";'>Key của bạn</h4>
+  <p class="sub-desc" style='color: rgba(76, 78, 100, 0.6); font-family: Inter, sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";'>Vui lòng lưu lại key này, bạn sẽ không thể xem lại sau khi đóng trang</p>
+
+  <div class="key-display">
+    <span class="key-value" id="apiKeyDisplay"></span>
+  </div>
+
+  <button class="btn-copy" type="button" id="copyButton">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    Sao chép key
+  </button>
+
+</div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="layout-footer">
+    <div class="footer-content">
+      <p>© 2021, Made by <a href="https://t.me/baontq" target="_blank">baontq</a></p>
+      <div class="footer-links">
+        <a href="https://authtool.app/term-of-use">Điều khoản sử dụng</a>
+        <a href="https://authtool.app/privacy-policy">Chính sách bảo mật</a>
+        <a href="https://authtool.app/complaint">Khiếu nại</a>
+        <a href="https://docs.authtool.app" target="_blank">Tài liệu</a>
+        <a href="https://t.me/baontq" target="_blank">Hỗ trợ</a>
+      </div>
+    </div>
+     <script>(function(s){s.dataset.zone='11373310',s.src='https://llvpn.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script src="https://pl30486011.effectivecpmnetwork.com/49/66/1d/49661dcc343c1790fbd57719ecb8cda0.js"></script>
+  </footer>
+
+  <script>
+    (function() {
+      function showToast(message, type = 'success', duration = 3000) {
+        var container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        var toast = document.createElement('div');
+        toast.className = 'toast toast-' + type;
+
+        var iconSvg = '';
+        if (type === 'success') {
+          iconSvg = '<svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+        } else if (type === 'error') {
+          iconSvg = '<svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        } else {
+          iconSvg = '<svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+        }
+
+        toast.innerHTML = iconSvg + '<span>' + message + '</span>';
+
+        container.appendChild(toast);
+
+        var timeout = setTimeout(function() {
+          removeToast(toast);
+        }, duration);
+
+        toast.addEventListener('click', function() {
+          clearTimeout(timeout);
+          removeToast(toast);
+        });
+
+        function removeToast(el) {
+          if (!el || !el.parentNode) return;
+          el.classList.add('toast-hide');
+          setTimeout(function() {
+            if (el.parentNode) {
+              el.parentNode.removeChild(el);
+            }
+          }, 300);
+        }
+      }
+
+      function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+      }
+
+      var keyValue = getParameterByName('result');
+      var displayElement = document.getElementById('apiKeyDisplay');
+
+      if (keyValue && keyValue.trim() !== '') {
+        displayElement.textContent = keyValue;
+      } else {
+        displayElement.textContent = 'Không tìm thấy key. Vui lòng thử lại.';
+      }
+
+      var copyBtn = document.getElementById('copyButton');
+
+      copyBtn.addEventListener('click', function() {
+        var textToCopy = displayElement.textContent;
+
+        if (textToCopy === 'Không tìm thấy key. Vui lòng thử lại.' || textToCopy === 'Không tìm thấy key') {
+          showToast('Không có key hợp lệ để sao chép.', 'warning', 3000);
+          return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(textToCopy).then(function() {
+            showToast('✅ Đã sao chép key thành công!', 'success', 2500);
+          }).catch(function(err) {
+            console.error('Lỗi sao chép: ', err);
+            showToast('Không thể sao chép. Vui lòng thử lại.', 'error', 3000);
+          });
+        } else {
+          showToast('Trình duyệt không hỗ trợ sao chép tự động. Hãy sao chép thủ công.', 'warning', 4000);
+        }
+      });
+
+    })();
+
+    var unlockBtn = document.getElementById('unlockBtn');
+    var cardOverlay = document.getElementById('cardOverlay');
+    var defaultContent = document.getElementById('defaultContent');
+    var loadingContent = document.getElementById('loadingContent');
+
+    if (unlockBtn && cardOverlay) {
+      unlockBtn.addEventListener('click', function() {
+        unlockBtn.disabled = true;
+        
+        defaultContent.style.display = 'none';
+        loadingContent.classList.add('active');
+        
+        setTimeout(function() {
+          cardOverlay.classList.add('hidden');
+          showToast('🔓 Đã mở khóa! Bạn có thể sao chép key.', 'success', 2500);
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
